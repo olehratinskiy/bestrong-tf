@@ -7,11 +7,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: AzureCLI@2
+- task: AzureCLI@1
   displayName: Azure CLI
   inputs:
     azureSubscription: azure sp resource manager
-    scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
       az --version
