@@ -16,7 +16,7 @@ steps:
       az --version
       az account show
 
-# - script: |
-#     terraform init
-#     terraform validate
-#   displayName: 'Terraform init and validate'
+- script: |
+    terraform init
+    terraform validate
+  displayName: 'Terraform init and validate'
