@@ -3,20 +3,27 @@ trigger:
     include:
       - main
 
+pr: none
+
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: AzureCLI@1
-  displayName: Azure CLI
-  inputs:
-    azureSubscription: azure sp resource manager
-    scriptLocation: inlineScript
-    inlineScript: |
-      az --version
-      az account show
+# - task: AzureCLI@1
+#   displayName: Azure CLI
+#   inputs:
+#     azureSubscription: azure sp resource manager
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az --version
+#       az account show
 
 - script: |
-    terraform init
+    terraform init -backend-config="resource_group_name=state-rg" 
+                   -backend-config="storage_account_name=terraformstorageo" 
+                   -backend-config="container_name=<Container Name>" 
+                   -backend-config="key=state" 
+                   -backend-config="access_key=terraform.tfstate"
     terraform validate
+    terraform plan
   displayName: 'Terraform init and validate'
