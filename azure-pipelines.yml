@@ -22,10 +22,10 @@ steps:
     provider: 'azurerm'
     command: 'init'
     backendServiceArm: 'azure sp resource manager'
-    backendAzureRmResourceGroupName: '${backend-rg}'
-    backendAzureRmStorageAccountName: '${backend-storage-name}'
-    backendAzureRmContainerName: '${backend-container-name}'
-    backendAzureRmKey: '${backend-key}'
+    backendAzureRmResourceGroupName: '$(backend-rg)'
+    backendAzureRmStorageAccountName: '$(backend-storage-name)'
+    backendAzureRmContainerName: '$(backend-container-name)'
+    backendAzureRmKey: '$(backend-key)'
 
 # - script: |
 #     terraform init -backend=true \
