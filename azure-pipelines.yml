@@ -18,9 +18,9 @@ steps:
       az login
 
 - script: |
-    terraform init -backend-config="resource_group_name=state-rg" 
-                   -backend-config="storage_account_name=terraformstorageo" 
-                   -backend-config="container_name=state" 
+    terraform init -backend-config="resource_group_name=state-rg" \
+                   -backend-config="storage_account_name=terraformstorageo" \
+                   -backend-config="container_name=state" \
                    -backend-config="key=terraform.tfstate"
     terraform validate
     terraform plan
