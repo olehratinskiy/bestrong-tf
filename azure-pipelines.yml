@@ -7,7 +7,17 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: |
-    terraform init
-    terraform validate
-  displayName: 'Terraform init and validate'
+- task: AzureCLI@2
+  displayName: Azure CLI
+  inputs:
+    azureSubscription: azure sp resource manager
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+      az --version
+      az account show
+
+# - script: |
+#     terraform init
+#     terraform validate
+#   displayName: 'Terraform init and validate'
