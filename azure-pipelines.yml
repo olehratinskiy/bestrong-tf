@@ -31,16 +31,17 @@ steps:
     environmentServiceNameAzureRM: 'azure sp resource manager'
 
 - task: TerraformTaskV4@4
-  displayName: 'Terraform apply'
+  displayName: 'Terraform plan'
   inputs:
     provider: 'azurerm'
-    command: 'apply'
+    command: "plan"
+    commandOptions: "-out=$(PLAN)"
     environmentServiceNameAzureRM: 'azure sp resource manager'
     # backendServiceArm: 'azure sp resource manager'    
     # backendAzureRmResourceGroupName: '$(backend-rg)'
     # backendAzureRmStorageAccountName: '$(backend-storage-name)'
     # backendAzureRmContainerName: '$(backend-container-name)'
     # backendAzureRmKey: '$(backend-key)'  
-  env:
-    mssql_server_login: $(mssql_server_login)
-    mssql_server_password: $(mssql_server_password)
+  # env:
+  #   mssql_server_login: $(mssql_server_login)
+  #   mssql_server_password: $(mssql_server_password)
