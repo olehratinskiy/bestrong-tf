@@ -30,17 +30,26 @@ steps:
     command: 'validate'
     environmentServiceNameAzureRM: 'azure sp resource manager'
 
-- task: TerraformTaskV4@4
-  displayName: 'Terraform apply'
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    environmentServiceNameAzureRM: 'azure sp resource manager'
-    backendServiceArm: 'azure sp resource manager'    
-    backendAzureRmResourceGroupName: '$(backend-rg)'
-    backendAzureRmStorageAccountName: '$(backend-storage-name)'
-    backendAzureRmContainerName: '$(backend-container-name)'
-    backendAzureRmKey: '$(backend-key)'  
-  env:
-    mssql_server_login: $(mssql_server_login)
-    mssql_server_password: $(mssql_server_password)
+- script: terraform plan -out=tfplan
+  displayName: 'Terraform Plan'
+  
+# - task: TerraformTaskV4@4
+#   displayName: 'Terraform plan'
+#   inputs:
+#     provider: 'azurerm'
+#     command: "plan"
+#     commandOptions: "-out=$(PLAN)"
+#     environmentServiceNameAzureRM: 'azure sp resource manager'
+#   env:
+#     ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+#     ARM_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+#     ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+#     ARM_TENANT_ID: $(AZURE_TENANT_ID)
+    # backendServiceArm: 'azure sp resource manager'    
+    # backendAzureRmResourceGroupName: '$(backend-rg)'
+    # backendAzureRmStorageAccountName: '$(backend-storage-name)'
+    # backendAzureRmContainerName: '$(backend-container-name)'
+    # backendAzureRmKey: '$(backend-key)'  
+  # env:
+  #   mssql_server_login: $(mssql_server_login)
+  #   mssql_server_password: $(mssql_server_password)
