@@ -26,6 +26,7 @@ stages:
             backendAzureRmContainerName: '$(backend-container-name)'
             backendAzureRmKey: '$(backend-key)'
     - job: Validate_terraform_config
+      dependsOn: Initialize_terraform_config
       steps:
       - task: TerraformTaskV4@4
         displayName: 'Terraform validate'
@@ -34,6 +35,7 @@ stages:
           command: 'validate'
           environmentServiceNameAzureRM: 'azure sp resource manager'
     - job: Deploy
+      dependsOn: Validate_terraform_config
       steps:
       - task: TerraformTaskV4@4
         displayName: 'Terraform apply'
