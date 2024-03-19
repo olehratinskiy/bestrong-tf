@@ -36,11 +36,11 @@ steps:
     provider: 'azurerm'
     command: 'apply'
     environmentServiceNameAzureRM: 'azure sp resource manager'
-    backendServiceArm: 'azure sp resource manager'    
-    backendAzureRmResourceGroupName: '$(backend-rg)'
-    backendAzureRmStorageAccountName: '$(backend-storage-name)'
-    backendAzureRmContainerName: '$(backend-container-name)'
-    backendAzureRmKey: '$(backend-key)'  
+    # backendServiceArm: 'azure sp resource manager'    
+    # backendAzureRmResourceGroupName: '$(backend-rg)'
+    # backendAzureRmStorageAccountName: '$(backend-storage-name)'
+    # backendAzureRmContainerName: '$(backend-container-name)'
+    # backendAzureRmKey: '$(backend-key)'  
   env:
     mssql_server_login: $(mssql_server_login)
     mssql_server_password: $(mssql_server_password)
