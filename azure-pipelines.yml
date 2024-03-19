@@ -35,13 +35,19 @@ steps:
   inputs:
     provider: 'azurerm'
     command: "plan"
-    commandOptions: "-out=$(PLAN)"
+    commandOptions: |
+      -out=$(PLAN)
+      -var "bestrong-client-id=$(ARM_CLIENT_ID)"
+      -var "bestrong-client-secret=$(ARM_CLIENT_SECRET)"
+      -var "bestrong-tenant-id=$(ARM_TENANT_ID)"
+      -var "bestrong-subscription-id=$(ARM_SUBSCRIPTION_ID)"
     environmentServiceNameAzureRM: 'azure sp resource manager'
   env:
     ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
     ARM_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
     ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
     ARM_TENANT_ID: $(AZURE_TENANT_ID)
+
     # backendServiceArm: 'azure sp resource manager'    
     # backendAzureRmResourceGroupName: '$(backend-rg)'
     # backendAzureRmStorageAccountName: '$(backend-storage-name)'
