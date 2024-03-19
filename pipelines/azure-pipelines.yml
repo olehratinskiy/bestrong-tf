@@ -5,35 +5,40 @@ trigger:
 
 pr: none
 
-pool:
-  vmImage: ubuntu-latest
-
 variables:
 - group: terraform-vars
 
-steps:
-- task: TerraformTaskV4@4
-  displayName: 'Terraform init'
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    backendServiceArm: 'azure sp resource manager'
-    backendAzureRmResourceGroupName: '$(backend-rg)'
-    backendAzureRmStorageAccountName: '$(backend-storage-name)'
-    backendAzureRmContainerName: '$(backend-container-name)'
-    backendAzureRmKey: '$(backend-key)'
-
-- task: TerraformTaskV4@4
-  displayName: 'Terraform validate'
-  inputs:
-    provider: 'azurerm'
-    command: 'validate'
-    environmentServiceNameAzureRM: 'azure sp resource manager'
-  
-- task: TerraformTaskV4@4
-  displayName: 'Terraform apply'
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    environmentServiceNameAzureRM: 'azure sp resource manager'
-    commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="mssql_server_login=$(mssql_server_login)" -var="mssql_server_password=$(mssql_server_password)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
+stages:
+- stage: Deploy_terraform_reaources
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+    - job: Initialize_terraform_config
+      steps:
+        - task: TerraformTaskV4@4
+          displayName: 'Terraform init'
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'azure sp resource manager'
+            backendAzureRmResourceGroupName: '$(backend-rg)'
+            backendAzureRmStorageAccountName: '$(backend-storage-name)'
+            backendAzureRmContainerName: '$(backend-container-name)'
+            backendAzureRmKey: '$(backend-key)'
+    - job: Validate_terraform_config
+      steps:
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform validate'
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+          environmentServiceNameAzureRM: 'azure sp resource manager'
+    - job: Deploy
+      steps:
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform apply'
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          environmentServiceNameAzureRM: 'azure sp resource manager'
+          commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="mssql_server_login=$(mssql_server_login)" -var="mssql_server_password=$(mssql_server_password)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
