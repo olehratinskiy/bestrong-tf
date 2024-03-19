@@ -3,20 +3,46 @@ trigger:
     include:
       - main
 
+pr: none
+
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: AzureCLI@1
-  displayName: Azure CLI
-  inputs:
-    azureSubscription: azure sp resource manager
-    scriptLocation: inlineScript
-    inlineScript: |
-      az --version
-      az account show
+variables:
+  backend-rg: 'state-rg'
+  backend-storage-name: 'terraformstorageo'
+  backend-container-name: 'state'
+  backend-key: 'terraform.tfstate'
 
-- script: |
-    terraform init
-    terraform validate
-  displayName: 'Terraform init and validate'
+steps:
+- task: TerraformTaskV4@4
+  displayName: 'Terraform init'
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'azure sp resource manager'
+    backendAzureRmResourceGroupName: '$(backend-rg)'
+    backendAzureRmStorageAccountName: '$(backend-storage-name)'
+    backendAzureRmContainerName: '$(backend-container-name)'
+    backendAzureRmKey: '$(backend-key)'
+
+- task: TerraformTaskV4@4
+  displayName: 'Terraform validate'
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    environmentServiceNameAzureRM: 'azure sp resource manager'
+
+- task: TerraformTaskV4@4
+  displayName: 'Terraform plan'
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'azure sp resource manager'
+
+- task: TerraformTaskV4@4
+  displayName: 'Terraform apply'
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'azure sp resource manager'  
