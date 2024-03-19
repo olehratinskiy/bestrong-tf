@@ -33,3 +33,16 @@ steps:
     command: 'validate'
     environmentServiceNameAzureRM: 'azure sp resource manager'
 
+- task: TerraformTaskV4@4
+  displayName: 'Terraform plan'
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'azure sp resource manager'
+
+- task: TerraformTaskV4@4
+  displayName: 'Terraform apply'
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'azure sp resource manager'  
