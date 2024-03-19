@@ -28,7 +28,11 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    environmentServiceNameAzureRM: 'azure sp resource manager'
+    backendServiceArm: 'azure sp resource manager'
+    backendAzureRmResourceGroupName: '$(backend-rg)'
+    backendAzureRmStorageAccountName: '$(backend-storage-name)'
+    backendAzureRmContainerName: '$(backend-container-name)'
+    backendAzureRmKey: '$(backend-key)'
 
 - task: TerraformTaskV4@4
   displayName: 'Terraform apply'
