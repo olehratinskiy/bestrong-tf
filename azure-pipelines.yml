@@ -14,7 +14,6 @@ variables:
   backend-container-name: 'state'
   backend-key: 'terraform.tfstate'
 
-
 steps:
 - task: TerraformTaskV4@4
   displayName: 'Terraform init'
@@ -27,12 +26,10 @@ steps:
     backendAzureRmContainerName: '$(backend-container-name)'
     backendAzureRmKey: '$(backend-key)'
 
-# - script: |
-#     terraform init -backend=true \
-#                    -backend-config="resource_group_name=" \
-#                    -backend-config="storage_account_name=" \
-#                    -backend-config="container_name=" \
-#                    -backend-config="key="
-#     terraform validate
-#     terraform plan
-#   displayName: 'Terraform init and validate'
+- task: TerraformTaskV4@4
+  displayName: 'Terraform validate'
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    environmentServiceNameAzureRM: 'azure sp resource manager'
+
