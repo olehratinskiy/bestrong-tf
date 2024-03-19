@@ -29,12 +29,9 @@ steps:
     provider: 'azurerm'
     command: 'validate'
     environmentServiceNameAzureRM: 'azure sp resource manager'
-
-# - script: terraform plan -out=tfplan
-#   displayName: 'Terraform Plan'
   
 - task: TerraformTaskV4@4
-  displayName: 'plan'
+  displayName: 'Terraform plan'
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -45,15 +42,3 @@ steps:
                     -var="tenant_id=$(AZURE_TENANT_ID)" \
                     -var="client_id=$(AZURE_CLIENT_ID)" \
                     -var="client_secret=$(AZURE_CLIENT_SECRET)"
-    # ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-    # ARM_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-    # ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-    # ARM_TENANT_ID: $(AZURE_TENANT_ID)
-    # backendServiceArm: 'azure sp resource manager'    
-    # backendAzureRmResourceGroupName: '$(backend-rg)'
-    # backendAzureRmStorageAccountName: '$(backend-storage-name)'
-    # backendAzureRmContainerName: '$(backend-container-name)'
-    # backendAzureRmKey: '$(backend-key)'  
-  # env:
-  #   mssql_server_login: $(mssql_server_login)
-  #   mssql_server_password: $(mssql_server_password)
