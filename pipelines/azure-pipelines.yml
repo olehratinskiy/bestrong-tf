@@ -15,7 +15,6 @@ stages:
   jobs:
     - job: Deploy_terraform_reaources
       steps:
-        - script: cd $(System.DefaultWorkingDirectory)/second-bestrong-tf
         - task: TerraformTaskV4@4
           displayName: 'Terraform init'
           inputs:
