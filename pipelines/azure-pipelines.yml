@@ -3,13 +3,47 @@ trigger:
     include:
       - main
 
-pr: none
+pr:
+- main
 
 variables:
 - group: terraform-vars
 
 stages:
-- stage: Deploy_terraform_reaources
+- stage: Build_terraform_resources
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+    - job: Build_terraform_resources
+      steps:
+        - task: TerraformTaskV4@4
+          displayName: 'Terraform init'
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'azure sp resource manager'
+            backendAzureRmResourceGroupName: '$(backend-rg)'
+            backendAzureRmStorageAccountName: '$(backend-storage-name)'
+            backendAzureRmContainerName: '$(backend-container-name)'
+            backendAzureRmKey: '$(backend-key)'
+
+        - task: TerraformTaskV4@4
+          displayName: 'Terraform validate'
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            environmentServiceNameAzureRM: 'azure sp resource manager'
+        - task: TerraformTaskV4@4
+          displayName: 'Terraform plan'
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'azure sp resource manager'
+            commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
+
+- stage: Deploy_terraform_resources
+  condition: ne(variables['Build.Reason'], 'PullRequest')
   pool:
     vmImage: ubuntu-latest
   jobs:
