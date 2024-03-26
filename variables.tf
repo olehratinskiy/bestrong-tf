@@ -13,11 +13,3 @@ variable "client_id" {
 variable "client_secret" {
   type = string
 }
-
-variable "mssql_server_login" {
-  type = string
-}
-
-variable "mssql_server_password" {
-  type = string
-}
