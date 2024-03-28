@@ -3,19 +3,19 @@ trigger:
     include:
       - main
 
-pr: none
+pr:
+- main
 
 variables:
 - group: terraform-vars
 
 stages:
-- stage: Deploy_terraform_reaources
+- stage: Build_terraform_resources
   pool:
     vmImage: ubuntu-latest
   jobs:
-    - job: Deploy_terraform_reaources
+    - job: Build_terraform_resources
       steps:
-        - script: cd $(System.DefaultWorkingDirectory)/second-bestrong-tf
         - task: TerraformTaskV4@4
           displayName: 'Terraform init'
           inputs:
@@ -28,15 +28,24 @@ stages:
             backendAzureRmKey: '$(backend-key)'
 
         - task: TerraformTaskV4@4
+          displayName: 'Terraform validate'
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            environmentServiceNameAzureRM: 'azure sp resource manager'
+        - task: TerraformTaskV4@4
           displayName: 'Terraform plan'
           inputs:
             provider: 'azurerm'
             command: 'plan'
             environmentServiceNameAzureRM: 'azure sp resource manager'
-        # - task: TerraformTaskV4@4
-        #   displayName: 'Terraform apply'
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'apply'
-        #     environmentServiceNameAzureRM: 'azure sp resource manager'
-        #     commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="mssql_server_login=$(mssql_server_login)" -var="mssql_server_password=$(mssql_server_password)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
+            commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
+
+        - task: TerraformTaskV4@4
+          condition:  and(not(failed()), ne(variables['Build.Reason'], 'PullRequest'))
+          displayName: 'Terraform apply'
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            environmentServiceNameAzureRM: 'azure sp resource manager'
+            commandOptions: '-var="client_id=$(AZURE_CLIENT_ID)" -var="client_secret=$(AZURE_CLIENT_SECRET)" -var="subscription_id=$(AZURE_SUBSCRIPTION_ID)" -var="tenant_id=$(AZURE_TENANT_ID)"'
