@@ -25,6 +25,7 @@ resource "azurerm_app_service" "bestrongwebapp" {
   site_config {
     always_on        = true
     linux_fx_version = "DOCKER|nginx"
+    acr_use_managed_identity_credentials = true
   }
 
   identity {
